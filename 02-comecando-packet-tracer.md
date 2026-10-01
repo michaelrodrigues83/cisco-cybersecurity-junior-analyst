@@ -8,38 +8,38 @@ Este documento registra a conclusão oficial dos estudos práticos de fundamento
 
 **Analista responsável:** Michael Hernandes Rodrigues  
 **Ambiente Utilizado:** Cisco Packet Tracer  
-**Escopo do Projeto:** Simulação de Infraestrutura de Rede Corporativa Segura com Segmentação de Setores e Conectividade Sem Fio (Wireless)  
+**Escopo do Projeto:** Simulação de Infraestrutura de Rede Corporativa com Roteamento e Switches em Cascata por Setores  
 
-> 📌 **Contexto Acadêmico:** Este projeto prático foi desenvolvido no âmbito de simulação de laboratório para correlacionar conceitos de sub-redes, roteamento de gateways e segurança periférica à minha graduação em Segurança da Informação na **Faculdade de Tecnologia Prof. José Arana Varela (Araraquara)**.
+> 📌 **Contexto Acadêmico:** Este projeto prático foi desenvolvido no âmbito de simulação de laboratório para correlacionar conceitos de sub-redes, roteamento de gateways e arquitetura de switches à minha graduação em Segurança da Informação na **Faculdade de Tecnologia Prof. José Arana Varela (Araraquara)**.
 
 ---
 
 ## 🗺️ 1.0 Arquitetura da Topologia Física
 
-A topologia simulada reproduz o cenário de uma organização dividida logicamente em dois setores de negócios principais, interconectados por um nó central de roteamento de borda:
+A topologia simulada reproduz o cenário de uma infraestrutura corporativa dividida em dois segmentos de rede principais, interconectados por um nó central de roteamento de borda e distribuídos por switches em cascata para expansão de endpoints:
 
-* **Ativo de Borda / Roteamento:** 1 Roteador Cisco 2911 de três interfaces Gigabit, atuando como o núcleo de encaminhamento de pacotes entre os segmentos.
-* **Ativos de Distribuição Camada 2:** 2 Switches Cisco Catalyst 2960 de 24 portas FastEthernet, responsáveis pelo gerenciamento local de enlace de dados em cada setor.
-* **Pontos de Acesso Wireless:** 2 Access Points corporativos vinculados diretamente aos switches locais para expansão da cobertura de rede móvel.
-* **Dispositivos Finais (Endpoints):** Estações de trabalho fixas cabeadas (PCs) e estações móveis híbridas (Laptops e Smartphones operando via Wi-Fi).
+![Topologia de Rede Corporativa Simulada no Cisco Packet Tracer](./diagrama.png)
+
+* **Ativo de Borda / Roteamento:** 1 Roteador Central (**R1**), atuando como o núcleo de encaminhamento de pacotes e isolamento de gateways entre as sub-redes.
+* **Ativos de Distribuição (Lado Esquerdo):** 2 Switches Cisco Catalyst 2960 (**Switch0** e **Swtob0**) conectados em cascata para gerenciar o enlace de dados e expandir as portas locais.
+* **Ativos de Distribuição (Lado Direito):** 2 Switches Cisco Catalyst 2960 de portas FastEthernet empilhados/conectados em cascata para atendimento do segundo setor.
+* **Dispositivos Finais (Endpoints):** 6 Estações de trabalho fixas totalmente cabeadas, divididas entre Computadores (PC0 e PC1) e Laptops (Laptop 0, 1, 2 e 3).
 
 ---
 
 ## ⚙️ 2.0 Detalhes do Endereçamento Lógico e Configuração
 
-O Roteador Cisco 2911 foi configurado para atuar como o gateway padrão de ambos os domínios de colisão, dividindo o tráfego nas seguintes sub-redes:
+O Roteador R1 atua como o gateway padrão de ambos os domínios de broadcast, dividindo o tráfego de forma limpa:
 
-### 💼 2.1 Setor A: Administration (Lado Esquerdo)
+### 💼 2.1 Setor A: Infraestrutura (Lado Esquerdo)
 * **Escopo de Endereçamento:** `192.168.1.0/24` (Máscara: `255.255.255.0`)
-* **Interface de Gateway (Roteador - GigabitEthernet 0/0):** `192.168.1.1`
-* **Identificador de Rede Sem Fio (SSID):** `WIFI-ADMIN`
-* **Inventário de Endpoints:** PC0 (`192.168.1.10`) e Laptop0 (`192.168.1.11`)
+* **Interface de Gateway (Roteador R1 - Interface Gig0/1):** `192.168.1.1`
+* **Inventário de Endpoints:** PC0, Laptop0 e Laptop1.
 
-### 💰 2.2 Setor B: Financeiro (Lado Direito)
+### 💰 2.2 Setor B: Infraestrutura (Lado Direito)
 * **Escopo de Endereçamento:** `192.168.2.0/24` (Máscara: `255.255.255.0`)
-* **Interface de Gateway (Roteador - GigabitEthernet 0/1):** `192.168.2.1`
-* **Identificador de Rede Sem Fio (SSID):** `WIFI-FIN`
-* **Inventário de Endpoints:** PC1 (`192.168.2.10`) e Laptop1 (`192.168.2.11`)
+* **Interface de Gateway (Roteador R1 - Interface Gig0/0):** `192.168.2.1`
+* **Inventário de Endpoints:** PC1, Laptop2 e Laptop3.
 
 ---
 
@@ -47,12 +47,12 @@ O Roteador Cisco 2911 foi configurado para atuar como o gateway padrão de ambos
 
 Para validar a integridade lógica da tabela de roteamento e o correto funcionamento do encapsulamento de pacotes do laboratório:
 
-1. Acesse o Prompt de Comando (CLI) de qualquer endpoint do Setor Administração (ex: **PC0**).
-2. Execute o comando de teste de eco ICMP em direção ao IP de uma estação de trabalho do Setor Financeiro:
+1. Acesse o Prompt de Comando (CLI) do **PC0**.
+2. Execute o comando de teste de eco ICMP em direção ao IP de uma estação de trabalho do Setor oposto (**PC1**):
    ```bash
    ping 192.168.2.10
    ```
-3. **Validação do SOC:** O sucesso no recebimento das respostas confirma a operação correta do protocolo ARP, a tradução de endereços nas interfaces do roteador e o perfeito funcionamento do Default Gateway.
+3. **Validação do SOC:** O sucesso no recebimento das respostas confirma a operação correta do protocolo ARP, a tradução de endereços nas interfaces do roteador R1 e o perfeito funcionamento dos Default Gateways através dos switches em cascata.
 
 ---
 
@@ -60,9 +60,9 @@ Para validar a integridade lógica da tabela de roteamento e o correto funcionam
 
 Embora o cenário simule a conectividade básica de infraestrutura, sob a ótica de Governança, Riscos e Conformidade (GRC), os aprendizados aplicados são de natureza puramente defensiva:
 
-* **Segmentação de Redes (ISO/IEC 27001:2022 - Controle A.8.22):** A divisão explícita em sub-redes distintas (`192.168.1.0/24` e `192.168.2.0/24`) isola os domínios de broadcast corporativos. Isso reduz drasticamente a superfície de ataque da organização, impedindo o farejamento de pacotes (*packet sniffing*) acidental e contendo a **Movimentação Lateral** de vetores maliciosos caso uma máquina periférica da Administração seja comprometida.
-* **Segurança de Serviços de Rede (Controle A.8.20):** A centralização dos gateways no roteador de borda cria um ponto único de auditoria lógica, permitindo que futuras Listas de Controle de Acesso (ACLs) sejam implantadas na CLI para restringir de forma rigorosa quais ativos do setor administrativo podem estabelecer conexões com os servidores ou dados confidenciais do setor financeiro.
-* **Gerenciamento de Redes Sem Fio:** A segregação de SSIDs (`WIFI-ADMIN` e `WIFI-FIN`) demonstra como a governança de ativos sem fio deve ser implementada para granularizar o controle de acessos com base na função (*Role-Based Access Control*).
+* **Segmentação de Redes (ISO/IEC 27001:2022 - Controle A.8.22):** A divisão explícita em sub-redes distintas (`192.168.1.0/24` e `192.168.2.0/24`) isola os domínios de broadcast corporativos. Isso reduz drasticamente a superfície de ataque da organização, impedindo o farejamento de pacotes (*packet sniffing*) acidental e contendo a **Movimentação Lateral** de vetores maliciosos caso uma máquina periférica de um setor seja comprometida.
+* **Segurança de Serviços de Rede (Controle A.8.20):** A arquitetura de interconexão de switches em cascata exige políticas rígidas de segurança física de portas (*Port Security*) para mitigar riscos de que atacantes pluguem dispositivos não autorizados na infraestrutura interna.
 
 ---
 [⬅️ Voltar para o Painel de Controle](./README.md)
+
