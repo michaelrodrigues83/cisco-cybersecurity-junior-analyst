@@ -10,7 +10,13 @@ Este relatório técnico documenta a análise forense e a auditoria regulatória
 
 ## 🔍 1.0 Evidências Coletadas e Sintomas de Alerta (Red Flags)
 
-A triagem inicial do e-mail simulando a empresa de tecnologia *Capgemini* revelou múltiplos indicadores de comprometimento (IoCs) visuais e lógicos:
+A triagem inicial do artefato malicioso isolado na caixa de entrada permitiu a captura das evidências visuais e lógicas descritas abaixo:
+
+### 📸 Evidência 01: Captura do E-mail de Phishing Recebido
+![E-mail de Phishing Capgemini Falso](./evidencia-email-phishing.png)
+*Figura 1: Interface do e-mail fraudulento exibindo uso de engenharia social e elementos gráficos mascarados.*
+
+A análise detalhada da imagem acima revelou múltiplos indicadores de comprometimento (IoCs):
 
 1. **Uso de Imagem Oculta para Bypass:** O conteúdo do golpe não foi enviado em formato de texto digitado, mas sim **mascarado dentro de um elemento de imagem embutido** no corpo do e-mail. Esta técnica visa burlar filtros heurísticos de gateways de e-mail (SEG), que possuem maior dificuldade em inspecionar strings dentro de camadas de arquivos visuais.
 2. **Inconsistência de Escopo e Urgência:** O assunto do e-mail indica um processo corporativo de boas-vindas (*"Welcome to Capgemini!"*), porém o corpo da mensagem induz o usuário a um gatilho financeiro fraudulento (*"1.3470 BTC BINANCE MINING"*), quebrando o princípio básico de coerência de contexto.
