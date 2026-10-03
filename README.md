@@ -32,6 +32,15 @@ Abaixo está o mapeamento de todo o plano de carreira oficial da Cisco. Os relat
 | 🥇 | **Técnico de Suporte Certificado Cisco (CCST)** | Preparação direcionada para a conquista da certificação profissional básica em Cibersegurança. | 📅 Planejado |
 
 ---
+
+## 🛠️ Laboratórios de Incidentes e Casos Reais (Informativos)
+
+Além do conteúdo programático da grade, utilizo vetores de ameaças reais detectados no cotidiano para exercitar a triagem, investigação e governança de riscos:
+
+* **Investigação de Engenharia Social:** [Análise Técnica e Forense de Incidente de Phishing](./analise-incidente-phishing.md)
+
+
+---
 📌 *Nota de Progresso: Este portfólio está em Andamento e Desenvolvimento Contínuo. Novos cenários técnicos, relatórios de tráfego (Wireshark/tcpdump) e automações defensivas serão publicados aqui conforme progrido na formação.*
 
 ---
